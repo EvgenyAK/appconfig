@@ -40,7 +40,7 @@ config.log_level = 'debug'
 config.log_level('debug')
 ```
 
-### Работа с версиями
+### Сохранение промежуточных версий
 
 ```python
 
@@ -56,10 +56,23 @@ config.log_level
 >>> 'debug'
 ```
 
-### Рарные варианты поиска опций
+### Изменение опций
 
 ```python
-config.log_level = appconfig.as_xpath('.//logger/data', config.service_a)
+# измненить все опции подпадающие под запрос
+config.log_level = appconfig.as_xpath('.//logger/*/data', config.service_a)
 config.log_level = appconfig.as_re('info', config.service_b)
+
+# изменение опций в нескольких конфигах
+config.service_a.log_level = 'info'
+config.service_a.log_level = 'info'
+
+# or
+config.log_level = appconfig.as_xpath('.//logger/*/data', config.service_a, config.service_b)
+
+# or
+config.group(config.service_a, config.service_b).log_level = 'info'
+goup_level = config.group(config.service_a, config.service_b)
+goup_level.log_level = 'info'
 ```
 
