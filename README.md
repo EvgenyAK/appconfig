@@ -8,22 +8,58 @@
 
 ## Примеры использования
 
-###Связывание опций 2 разных конфигов
+### Объектное представление 
 
 ```python
 import appconfig
 
-config = appconfig.Config("config_path")
+config = appconfig.Config("/etc/some/some.conf")
 
-@appconfig.option
+config.logger.level = 'info'
+config['logger']['level'] = 'info'
+config.save()
+```
+
+### Связывание опций разных конфигов
+
+```python
+import appconfig
+
+config = appconfig.Config(
+    service_a="/etc/service_a/config.conf",
+    service_b="/etc/service_b/config.conf"
+)
+
+@config.option
 def log_level(value=None):
-    appconfig.service_a.log_level = value
-    appconfig.service_b.common.logger.log_level = value
+    config.service_a.log_level = value
+    config.service_b.common.logger.log_level = value
 
 config.log_level = 'debug'
 # or
 config.log_level('debug')
 ```
 
+### Работа с версиями
 
+```python
+
+config.save()
+# возвращение к первоначальным настройкам
+config.reset()
+
+config.log_level = 'trace'
+config.save(version='v1')
+config.log_level = 'info'
+config.reset(version='vi')
+config.log_level
+>>> 'debug'
+```
+
+### Рарные варианты поиска опций
+
+```python
+config.log_level = appconfig.as_xpath('.//logger/data', config.service_a)
+config.log_level = appconfig.as_re('info', config.service_b)
+```
 
