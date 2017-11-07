@@ -8,6 +8,23 @@
 
 ## Примеры использования
 
+### Загрузка разных типов файлов
+
+```python
+import appconfig
+
+json_conf = appconfig.Config("/etc/some/some.conf")
+yaml_conf = appconfig.Config("/etc/some/some.yaml")
+ini_conf = appconfig.Config("/etc/some/some.ini")
+py_conf = appconfig.Config("/etc/some/some.py")
+
+# свой формат
+def lala(file):
+    return {'option': 'lala'}
+
+any_conf = appconfig.Config("/etc/some/some.lala", loader=lala)
+```
+
 ### Объектное представление 
 
 ```python
